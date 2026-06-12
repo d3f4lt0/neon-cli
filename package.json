@@ -1,6 +1,6 @@
 {
   "name": "neon-cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A colorful developer CLI with lightweight AI workflow helpers",
   "type": "module",
   "bin": {
@@ -12,7 +12,8 @@
     "init": "node ./bin/neon.js init",
     "brainstorm": "node ./bin/neon.js brainstorm",
     "commit": "node ./bin/neon.js commit",
-    "prompt": "node ./bin/neon.js prompt"
+    "prompt": "node ./bin/neon.js prompt",
+    "studio": "node ./bin/neon.js studio"
   },
   "keywords": [
     "cli",

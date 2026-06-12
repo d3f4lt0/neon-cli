@@ -14,6 +14,8 @@ It mixes small CLI utilities with practical AI-friendly helpers.
 - `brainstorm` command for quick project ideas
 - `commit` command for clean commit message suggestions
 - `prompt` command for AI-ready build prompts
+- `studio` interactive mode for guided usage
+- optional `--save` output export
 - simple, hackable structure
 
 ## install
@@ -31,26 +33,19 @@ npm link
 neon hello d3f4lt
 neon init my-app
 neon brainstorm portfolio tools
+neon brainstorm portfolio tools --save ideas.txt
 neon commit feat onboarding flow
-neon prompt build a calm productivity app
+neon prompt build a calm productivity app --save prompt.txt
+neon studio
 ```
 
-## example
+## interactive mode
 
 ```bash
-$ neon brainstorm portfolio tools
-
-────────────────────────────────────────
-brainstorm
-────────────────────────────────────────
-topic: portfolio tools
-
-1. signalboard
-   A calm dashboard for tracking portfolio tools with visible progress and low clutter.
-
-2. promptforge
-   A tiny utility that turns rough portfolio tools ideas into clean AI prompts and action steps.
+neon studio
 ```
+
+`studio` lets you pick a mode and generate output without remembering every argument.
 
 ## commands
 
@@ -59,15 +54,18 @@ topic: portfolio tools
 - `brainstorm` — generate starter ideas around a topic
 - `commit` — suggest commit message variants
 - `prompt` — output a clean AI build prompt
+- `studio` — interactive launcher for the main workflows
 
 ## roadmap
 
 - [x] create first commands
 - [x] scaffold starter folder
 - [x] add AI-flavored helper commands
-- [ ] add interactive prompt selection
-- [ ] export prompts to files
-- [ ] support richer project templates
+- [x] add interactive studio mode
+- [x] support saving output to files
+- [ ] add richer project templates
+- [ ] add prompt presets for different workflows
+- [ ] support better terminal styling and selection
 
 ## stack
 

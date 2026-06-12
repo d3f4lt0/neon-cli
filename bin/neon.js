@@ -2,6 +2,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import readline from 'node:readline';
 
 const args = process.argv.slice(2);
 const command = args[0] || 'help';
@@ -37,12 +38,13 @@ function showHelp() {
   log('A colorful developer CLI with lightweight AI workflow helpers.');
   log('');
   section('Usage');
-  log('  neon hello [name]                Print a friendly neon greeting');
-  log('  neon init [folder]               Create a tiny starter project');
-  log('  neon brainstorm [topic]          Generate project ideas');
-  log('  neon commit [type] [summary]     Suggest clean commit messages');
-  log('  neon prompt [task]               Generate an AI-friendly prompt');
-  log('  neon help                        Show this help message');
+  log('  neon hello [name]                         Print a friendly neon greeting');
+  log('  neon init [folder]                        Create a tiny starter project');
+  log('  neon brainstorm [topic] [--save file]     Generate project ideas');
+  log('  neon commit [type] [summary] [--save file] Suggest clean commit messages');
+  log('  neon prompt [task] [--save file]          Generate an AI-friendly prompt');
+  log('  neon studio                               Launch interactive mode');
+  log('  neon help                                 Show this help message');
   log('');
 }
 
@@ -50,6 +52,26 @@ function hello(name = 'builder') {
   title('hello');
   log(`${color.green}Hey, ${name}.${color.reset}`);
   log(`${color.gray}Build something sharp today.${color.reset}`);
+  log('');
+}
+
+function parseSaveArg(commandArgs) {
+  const saveIndex = commandArgs.indexOf('--save');
+  if (saveIndex === -1) {
+    return { values: commandArgs, savePath: null };
+  }
+
+  const savePath = commandArgs[saveIndex + 1] || null;
+  const values = commandArgs.filter((_, index) => index !== saveIndex && index !== saveIndex + 1);
+  return { values, savePath };
+}
+
+function saveOutput(filePath, content) {
+  if (!filePath) return;
+
+  const resolvedPath = path.resolve(process.cwd(), filePath);
+  fs.writeFileSync(resolvedPath, content + '\n');
+  log(`${color.gray}saved:${color.reset} ${resolvedPath}`);
   log('');
 }
 
@@ -85,7 +107,7 @@ function initProject(folder = 'neon-starter') {
   log('');
 }
 
-function brainstorm(topic = 'developer tools') {
+function brainstorm(topic = 'developer tools', options = {}) {
   const ideas = [
     {
       name: 'signalboard',
@@ -101,6 +123,13 @@ function brainstorm(topic = 'developer tools') {
     }
   ];
 
+  const output = [
+    'brainstorm',
+    `topic: ${topic}`,
+    '',
+    ...ideas.flatMap((idea, index) => [`${index + 1}. ${idea.name}`, `   ${idea.pitch}`])
+  ].join('\n');
+
   title('brainstorm');
   log(`${color.gray}topic:${color.reset} ${topic}`);
   log('');
@@ -109,9 +138,11 @@ function brainstorm(topic = 'developer tools') {
     log(`   ${idea.pitch}`);
   });
   log('');
+
+  saveOutput(options.savePath, output);
 }
 
-function commit(type = 'feat', ...summaryParts) {
+function commit(type = 'feat', summaryParts = [], options = {}) {
   const cleanedType = type.trim() || 'feat';
   const cleanedSummary = summaryParts.join(' ').trim() || 'project flow';
   const variants = [
@@ -120,14 +151,18 @@ function commit(type = 'feat', ...summaryParts) {
     `${cleanedType}: polish ${cleanedSummary}`
   ];
 
+  const output = ['commit suggestions', ...variants.map((item, index) => `${index + 1}. ${item}`)].join('\n');
+
   title('commit suggestions');
   variants.forEach((item, index) => {
     log(`${color.blue}${index + 1}.${color.reset} ${item}`);
   });
   log('');
+
+  saveOutput(options.savePath, output);
 }
 
-function promptTask(task = 'build a clean developer tool') {
+function promptTask(task = 'build a clean developer tool', options = {}) {
   const prompt = [
     'You are helping me build a polished software project.',
     `Task: ${task}.`,
@@ -142,25 +177,83 @@ function promptTask(task = 'build a clean developer tool') {
   title('ai prompt');
   log(prompt);
   log('');
+
+  saveOutput(options.savePath, prompt);
 }
 
-switch (command) {
-  case 'hello':
-    hello(args[1]);
-    break;
-  case 'init':
-    initProject(args[1]);
-    break;
-  case 'brainstorm':
-    brainstorm(args.slice(1).join(' ') || undefined);
-    break;
-  case 'commit':
-    commit(args[1], ...args.slice(2));
-    break;
-  case 'prompt':
-    promptTask(args.slice(1).join(' ') || undefined);
-    break;
-  case 'help':
-  default:
-    showHelp();
+function ask(rl, question) {
+  return new Promise((resolve) => rl.question(question, (answer) => resolve(answer.trim())));
 }
+
+async function studio() {
+  title('neon studio');
+  log(`${color.gray}Choose a mode and generate something useful.${color.reset}`);
+  log('');
+  log('1. brainstorm project ideas');
+  log('2. suggest commit messages');
+  log('3. craft an ai build prompt');
+  log('4. scaffold a starter project');
+  log('');
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  try {
+    const choice = await ask(rl, 'Pick an option (1-4): ');
+
+    if (choice === '1') {
+      const topic = await ask(rl, 'Topic: ');
+      brainstorm(topic || 'developer tools');
+    } else if (choice === '2') {
+      const type = await ask(rl, 'Commit type (feat/fix/chore/docs): ');
+      const summary = await ask(rl, 'Summary: ');
+      commit(type || 'feat', summary ? summary.split(' ') : [], {});
+    } else if (choice === '3') {
+      const task = await ask(rl, 'Prompt task: ');
+      promptTask(task || 'build a clean developer tool');
+    } else if (choice === '4') {
+      const folder = await ask(rl, 'Folder name: ');
+      initProject(folder || 'neon-starter');
+    } else {
+      log(`${color.yellow}Unknown option.${color.reset}`);
+      log('');
+    }
+  } finally {
+    rl.close();
+  }
+}
+
+async function main() {
+  const { values, savePath } = parseSaveArg(args.slice(1));
+
+  switch (command) {
+    case 'hello':
+      hello(values[0]);
+      break;
+    case 'init':
+      initProject(values[0]);
+      break;
+    case 'brainstorm':
+      brainstorm(values.join(' ') || undefined, { savePath });
+      break;
+    case 'commit':
+      commit(values[0], values.slice(1), { savePath });
+      break;
+    case 'prompt':
+      promptTask(values.join(' ') || undefined, { savePath });
+      break;
+    case 'studio':
+      await studio();
+      break;
+    case 'help':
+    default:
+      showHelp();
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
