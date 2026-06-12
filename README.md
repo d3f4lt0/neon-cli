@@ -2,40 +2,60 @@
 
 A tiny colorful terminal starter for developer workflows.
 
-## idea
+## features
 
-`neon-cli` is a small concept project around developer ergonomics in the terminal:
-
-- quick project bootstrap
-- beautiful output
-- clean command structure
-- room for automation
+- colorful terminal output
+- friendly `hello` command
+- `init` command to scaffold a tiny starter folder
+- simple, hackable structure
 
 ## why
 
-I like tools that feel fast, clean, and a little bit fun to use.
-This repo is where I explore that direction.
+I like terminal tools that feel fast, clean, and fun to use.
+`neon-cli` is a small playground for that idea.
 
-## possible features
+## install
 
-- create project templates
-- interactive prompts
-- command presets
-- terminal themes / styled output
-- task shortcuts
+```bash
+git clone https://github.com/d3f4lt0/neon-cli.git
+cd neon-cli
+npm install
+npm link
+```
 
-## status
+## usage
 
-Early concept. Building in public.
+```bash
+neon hello
+neon hello d3f4lt
+neon init my-app
+```
+
+## example
+
+```bash
+$ neon hello d3f4lt
+
+────────────────────────────────────────
+hello
+────────────────────────────────────────
+Hey, d3f4lt.
+Build something sharp today.
+```
+
+## roadmap
+
+- [x] create first commands
+- [x] scaffold starter folder
+- [ ] add interactive prompts
+- [ ] ship better templates
+- [ ] improve terminal styling
 
 ## stack
 
 - Node.js
-- TypeScript
+- JavaScript (ESM)
 
-## roadmap
+## status
 
-- [ ] define command structure
-- [ ] add starter scaffold
-- [ ] build first usable command
-- [ ] polish terminal UX
+Early version, built in public.
