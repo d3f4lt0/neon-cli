@@ -1,0 +1,12 @@
+{
+  "name": "neon-cli",
+  "version": "0.1.0",
+  "description": "A tiny colorful terminal starter for developer workflows",
+  "type": "module",
+  "bin": {
+    "neon": "./bin/neon.js"
+  },
+  "scripts": {
+    "start": "node ./bin/neon.js"
+  }
+}
