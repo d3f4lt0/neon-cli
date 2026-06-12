@@ -1,18 +1,28 @@
 {
   "name": "neon-cli",
-  "version": "0.3.0",
-  "description": "A colorful developer CLI with lightweight AI workflow helpers",
+  "version": "0.4.0",
+  "description": "A colorful developer CLI with lightweight AI workflow helpers and Darija-friendly commands",
   "type": "module",
   "bin": {
     "neon": "./bin/neon.js"
   },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "node ./bin/neon.js",
+    "test": "node --test",
     "hello": "node ./bin/neon.js hello",
     "init": "node ./bin/neon.js init",
     "brainstorm": "node ./bin/neon.js brainstorm",
     "commit": "node ./bin/neon.js commit",
     "prompt": "node ./bin/neon.js prompt",
+    "readme": "node ./bin/neon.js readme",
+    "slug": "node ./bin/neon.js slug",
+    "darija": "node ./bin/neon.js darija",
     "studio": "node ./bin/neon.js studio"
   },
   "keywords": [
@@ -21,7 +31,23 @@
     "developer-tools",
     "ai",
     "prompts",
+    "darija",
+    "morocco",
     "nodejs"
   ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d3f4lt0/neon-cli.git"
+  },
+  "homepage": "https://github.com/d3f4lt0/neon-cli",
+  "bugs": {
+    "url": "https://github.com/d3f4lt0/neon-cli/issues"
+  },
   "license": "MIT"
 }
