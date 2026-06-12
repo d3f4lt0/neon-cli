@@ -1,7 +1,7 @@
 {
   "name": "neon-cli",
-  "version": "0.1.1",
-  "description": "A tiny colorful terminal starter for developer workflows",
+  "version": "0.2.0",
+  "description": "A colorful developer CLI with lightweight AI workflow helpers",
   "type": "module",
   "bin": {
     "neon": "./bin/neon.js"
@@ -9,12 +9,17 @@
   "scripts": {
     "start": "node ./bin/neon.js",
     "hello": "node ./bin/neon.js hello",
-    "init": "node ./bin/neon.js init"
+    "init": "node ./bin/neon.js init",
+    "brainstorm": "node ./bin/neon.js brainstorm",
+    "commit": "node ./bin/neon.js commit",
+    "prompt": "node ./bin/neon.js prompt"
   },
   "keywords": [
     "cli",
     "terminal",
     "developer-tools",
+    "ai",
+    "prompts",
     "nodejs"
   ],
   "license": "MIT"
